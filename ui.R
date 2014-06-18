@@ -1,0 +1,56 @@
+library(shiny)
+library(shinyapps)
+
+shinyUI(pageWithSidebar(
+  headerPanel("Pizza Ordering"),
+  sidebarPanel(
+    dateInput("mDate", "Delivery Date:"),
+    sliderInput("mTime", "Delivery Time (1 - 9 PM):", 1, 9, 1, step = 1,
+                round = FALSE, format = "#,##0", locale = "us",
+                ticks = TRUE, animate = FALSE),
+    p(''),
+    numericInput('mQty', 'Quantity', 1, min = 1, max = 10, step = 1),
+    radioButtons("mSize", "Size",
+                 c("6' Personal ($5)" = 5,
+                   "8' Small ($8)" = 8,
+                   "10' Medium ($12)" = 12,
+                   "12' Large ($18)" = 18,
+                   "14' Extra Large ($24)" = 24),
+                 selected = 12),
+    checkboxGroupInput("mTopings", "Topings",
+          c("Pepperoni, Classic" = "P",
+          "Sausage, Italian" = "S",
+          "Ham" = "H",
+          "Chicken, Grilled" = "GC",
+          "Bacon, Pieces" = "BP",
+          "Olives, Black" = "BO",
+          "Peppers, Green" = "GP",
+          "Pineapple" = "PA")),
+    radioButtons("mSauce", "Sauces",
+          c("Red Pizza Sauce" = "RED",
+          "Creamy Garlic Sauce" = "WHT",
+          "BBQ Sauce" = "BBQ"),
+        selected = "RED")
+  ),
+  mainPanel(
+    h3('Instructions'),
+    p('1. Select a Date and Time'),
+    p('2. Select Quantity and Size'),
+    p('3. Select Toppings and Sauce'),
+    br(''),
+    h4('Your total price has been calculated below'),
+    verbatimTextOutput("oamount"),
+    p(''),
+    br(''),
+    h4('Date & Time'),
+    verbatimTextOutput("odate"),
+    h4('Quantity'),
+    verbatimTextOutput("oqty"),
+    h4('Topings'),
+    verbatimTextOutput("otopings"),
+    h4('Sauce'),
+    verbatimTextOutput("osauce"),
+    h4('Unit Price'),
+    verbatimTextOutput("osize")
+  )
+))
