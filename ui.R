@@ -4,11 +4,6 @@ library(shinyapps)
 shinyUI(pageWithSidebar(
   headerPanel("Pizza Ordering"),
   sidebarPanel(
-    dateInput("mDate", "Delivery Date:"),
-    sliderInput("mTime", "Delivery Time (1 - 9 PM):", 1, 9, 1, step = 1,
-                round = FALSE, format = "#,##0", locale = "us",
-                ticks = TRUE, animate = FALSE),
-    p(''),
     numericInput('mQty', 'Quantity', 1, min = 1, max = 10, step = 1),
     radioButtons("mSize", "Size",
                  c("6' Personal ($5)" = 5,
@@ -17,7 +12,7 @@ shinyUI(pageWithSidebar(
                    "12' Large ($18)" = 18,
                    "14' Extra Large ($24)" = 24),
                  selected = 12),
-    checkboxGroupInput("mTopings", "Topings",
+    checkboxGroupInput("mToppings", "Toppings",
           c("Pepperoni, Classic" = "P",
           "Sausage, Italian" = "S",
           "Ham" = "H",
@@ -30,27 +25,49 @@ shinyUI(pageWithSidebar(
           c("Red Pizza Sauce" = "RED",
           "Creamy Garlic Sauce" = "WHT",
           "BBQ Sauce" = "BBQ"),
-        selected = "RED")
+        selected = "RED"),
+    br(''),
+    dateInput("mDate", "Pickup Date:"),
+    sliderInput("mTime", "Pickup Time (1 - 9 PM):", 1, 9, 1, step = 1,
+                round = FALSE, format = "#,##0", locale = "us",
+                ticks = TRUE, animate = FALSE),
+    br(''),
+    actionButton("mPrint", label = "Print")
   ),
   mainPanel(
-    h3('Instructions'),
-    p('1. Select a Date and Time'),
-    p('2. Select Quantity and Size'),
-    p('3. Select Toppings and Sauce'),
-    br(''),
-    h4('Your total price has been calculated below'),
+    h3('Thank you for your order'),
+    h4('Your order amount is:'),
     verbatimTextOutput("oamount"),
-    p(''),
-    br(''),
-    h4('Date & Time'),
-    verbatimTextOutput("odate"),
-    h4('Quantity'),
-    verbatimTextOutput("oqty"),
-    h4('Topings'),
-    verbatimTextOutput("otopings"),
-    h4('Sauce'),
-    verbatimTextOutput("osauce"),
-    h4('Unit Price'),
-    verbatimTextOutput("osize")
+    
+    conditionalPanel(
+      condition <- "1",
+      br(''),
+      h3('Instructions'),
+      p('To order your pizza(s) online, please fill in the information to the left:'),
+      p('1. Select quantity and size'),
+      p('2. Select toppings and sauce'),
+      p('3. Select the pickup date and time'),
+      p('4. Click Print'),
+      p('Your order amount will show above.'),
+      p('Your order detail will show below.')
+    ),
+        
+    conditionalPanel(
+      condition <- "1",
+      br(''),
+      h4('Order Details:'),
+      h5('Date & Time'),
+      verbatimTextOutput("odate"),
+      h5('Quantity'),
+      verbatimTextOutput("oqty"),
+      h5('Toppings'),
+      verbatimTextOutput("otoppings"),
+      h5('Sauce'),
+      verbatimTextOutput("osauce"),
+      h5('Unit Price'),
+      verbatimTextOutput("osize"),
+      h5('Number of Print button click'),
+      verbatimTextOutput("oprint")
+    )
   )
 ))
